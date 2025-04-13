@@ -3,16 +3,18 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { usePathname } from 'next/navigation'
+import { useAuth } from '@/app/contexts/AuthContext'
 
 export default function Navbar() {
   const pathname = usePathname()
+  const { isAuthenticated, user, logout } = useAuth()
   
   const links = [
     { name: 'Home', path: '/' },
     { name: 'About', path: '/about' },
     { name: 'Requirements', path: '/requirements' },
-    { name: 'Donors', path: '/donor' },
-    { name: 'Patients', path: '/patient' },
+    { name: 'Patients', path: '/patients' },
+    ...(isAuthenticated ? [{ name: 'Dashboard', path: '/dashboard' }] : []),
   ]
 
   return (
@@ -43,12 +45,34 @@ export default function Navbar() {
               </Link>
             ))}
             <div className="flex space-x-4">
-              <Link
-                href="/sign-in"
-                className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors"
-              >
-                Sign In
-              </Link>
+              {isAuthenticated ? (
+                <>
+                  <span className="px-3 py-2 text-gray-600">
+                    Welcome, {user?.name}
+                  </span>
+                  <button
+                    onClick={logout}
+                    className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors"
+                  >
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/login"
+                    className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/signup"
+                    className="px-4 py-2 rounded-lg border border-red-600 text-red-600 hover:bg-red-50 transition-colors"
+                  >
+                    Sign Up
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -4,10 +4,13 @@ import { motion } from 'framer-motion'
 import DonationRequirements from './components/DonationRequirements'
 import Link from 'next/link'
 import { FiDroplet, FiHeart, FiUsers } from 'react-icons/fi'
-import heroVideo from './assets/hero-video.mp4'
+import { useState } from 'react'
+import DonorForm from './components/DonorForm'
 
 export default function Home() {
-return (
+  const [showDonorForm, setShowDonorForm] = useState(false);
+
+  return (
     <div className="min-h-screen pt-16">
       {/* Hero Section with Video */}
       <section className="relative h-screen flex items-center justify-center">
@@ -17,9 +20,8 @@ return (
           muted
           playsInline
           className="absolute inset-0 w-full h-full object-cover z-0"
-          src={heroVideo}
+          src="/videos/hero-video.mp4"
         >
-          
           Your browser does not support the video tag.
         </video>
         <div className="absolute inset-0 bg-black/50 z-10" />
@@ -34,12 +36,12 @@ return (
           <p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto">
             Discover the life-saving impact of blood donation
           </p>
-          <Link
-            href="/auth/sign-up"
+          <button
+            onClick={() => setShowDonorForm(true)}
             className="bg-red-600 text-white px-8 py-3 rounded-lg text-lg hover:bg-red-700 transition-colors inline-block"
           >
             Become a Donor
-          </Link>
+          </button>
         </motion.div>
       </section>
 
@@ -77,12 +79,12 @@ return (
             <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
               Join our community of life-savers today. Your single donation can save up to 3 lives.
             </p>
-            <Link
-              href="/auth/sign-up"
+            <button
+              onClick={() => setShowDonorForm(true)}
               className="bg-red-600 text-white px-8 py-3 rounded-lg text-lg hover:bg-red-700 transition-colors inline-block"
             >
               Become a Donor Now
-            </Link>
+            </button>
           </motion.div>
         </div>
       </section>
@@ -123,6 +125,10 @@ return (
       </section>
 
       <DonationRequirements />
+      
+      {showDonorForm && (
+        <DonorForm isOpen={showDonorForm} onClose={() => setShowDonorForm(false)} />
+      )}
     </div>
   )
 }
